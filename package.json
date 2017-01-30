@@ -1,0 +1,27 @@
+{
+  "name": "samevalue-set",
+  "version": "1.0.0-pre",
+  "description": "ECMAScript Set, but using SameValue instead of SameValueZero",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michaelficarra/samevalue-set.git"
+  },
+  "keywords": [
+    "set",
+    "SameValue",
+    "zero",
+    "negative",
+    "zero",
+    "SameValueZero"
+  ],
+  "author": "Michael Ficarra",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/michaelficarra/samevalue-set/issues"
+  },
+  "homepage": "https://github.com/michaelficarra/samevalue-set#readme"
+}
