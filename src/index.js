@@ -5,9 +5,6 @@ function isMinusZero(x) {
 }
 
 let call = Function.prototype.call.bind(Function.prototype.call);
-let slice = Function.prototype.call.bind([].slice);
-let forEach = Function.prototype.call.bind([].forEach);
-let arrayFrom = Function.prototype.call.bind(Array.from, Array);
 
 export default class SameValueSet extends Set {
   constructor(iterable) {
@@ -47,15 +44,14 @@ export default class SameValueSet extends Set {
         return true;
       }
       return false;
-    } else {
-      if (this.before.delete(value)) {
-        return true;
-      }
-      if (!this.containsMinusZero) {
-        return false;
-      }
-      return this.after.delete(value);
     }
+    if (this.before.delete(value)) {
+      return true;
+    }
+    if (!this.containsMinusZero) {
+      return false;
+    }
+    return this.after.delete(value);
   }
 
   entries() {
