@@ -1,71 +1,95 @@
-// TODO: preserve insertion order for enumeration
+// TODO: create real SetIterator objects
 
 function isMinusZero(x) {
   return Object.is(-0, x);
 }
 
 let call = Function.prototype.call.bind(Function.prototype.call);
+let slice = Function.prototype.call.bind([].slice);
+let forEach = Function.prototype.call.bind([].forEach);
+let arrayFrom = Function.prototype.call.bind(Array.from, Array);
 
 export default class SameValueSet extends Set {
-  constructor(iterable, ...rest) {
-    super(iterable, ...rest);
+  constructor(iterable) {
+    super();
+    this.before = new Set;
+    this.after = new Set;
     this.containsMinusZero = false;
+    for (let x of iterable) {
+      this.add(x);
+    }
   }
 
-  add(value, ...rest) {
+  add(value) {
     if (isMinusZero(value)) {
       this.containsMinusZero = true;
+    } else if (this.containsMinusZero) {
+      if (!this.before.has(value)) {
+        this.after.add(value);
+      }
     } else {
-      super.add(value, ...rest);
+      this.before.add(value);
     }
+    return this;
   }
 
-  clear(...rest) {
+  clear() {
     this.containsMinusZero = false;
-    super.clear(...rest);
+    this.before.clear();
+    this.after.clear();
+    return;
   }
 
-  delete(value, ...rest) {
+  delete(value) {
     if (isMinusZero(value)) {
-      this.containsMinusZero = false;
+      if (this.containsMinusZero) {
+        this.containsMinusZero = false;
+        return true;
+      }
+      return false;
     } else {
-      super.delete(value, ...rest);
+      if (this.before.delete(value)) {
+        return true;
+      }
+      if (!this.containsMinusZero) {
+        return false;
+      }
+      return this.after.delete(value);
     }
   }
 
-  entries(...rest) {
+  entries() {
     if (this.containsMinusZero) {
-      return [[-0, -0], ...super.entries(...rest)];
+      return [...this.before.entries(), [-0, -0], ...this.after.entries()];
     }
-    return super.entries(...rest);
+    return [...this.before.entries(), ...this.after.entries()];
   }
 
-  forEach(callbackfn, thisArg, ...rest) {
+  forEach(callbackfn, thisArg = void 0) {
+    this.before.forEach(callbackfn, thisArg);
     if (this.containsMinusZero) {
       call(callbackfn, thisArg, -0, -0, this);
     }
-    super.forEach(callbackfn, thisArg, ...rest);
+    this.after.forEach(callbackfn, thisArg);
+    return;
   }
 
   has(value) {
     if (isMinusZero(value)) {
       return this.containsMinusZero;
     }
-    return super.has(value);
+    return this.before.has(value) || this.after.has(value);
   }
 
   get size() {
-    if (this.containsMinusZero) {
-      return super.size + 1;
-    }
-    return super.size;
+    return this.before.size + (this.containsMinusZero ? 1 : 0) + this.after.size;
   }
 
   values() {
     if (this.containsMinusZero) {
-      return [-0, ...super.values(...rest)];
+      return [...this.before.values(), -0, ...this.after.values()];
     }
-    return super.values(...rest);
+    return [...this.before.values(), ...this.after.values()];
   }
 }
 
