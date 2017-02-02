@@ -4,8 +4,8 @@ script:
   - npm run build
   - npm test
 node_js:
-  - "4"
   - "6"
+  - "7"
 # the following config is needed for the "microtime" native node module
 env:
   - CXX=g++-4.8
