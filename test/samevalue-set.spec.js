@@ -192,5 +192,10 @@ describe('unit tests', () => {
     it('inherits from Set', () => {
       assert.ok(new SameValueSet instanceof Set);
     });
+
+    it('produces real SetIterator objects', () => {
+      let SetIteratorPrototype = Object.getPrototypeOf((new Set)[Symbol.iterator]());
+      assert.equal(Object.getPrototypeOf((new SameValueSet)[Symbol.iterator]()), SetIteratorPrototype);
+    });
   });
 });

@@ -1,11 +1,22 @@
-// TODO: create real SetIterator objects
 // TODO: use flow
+
+const SetIteratorPrototype = Object.getPrototypeOf((new Set)[Symbol.iterator]());
+
+function createSetIterator(iterable) {
+  let iterator = iterable[Symbol.iterator]();
+  return {
+    __proto__: SetIteratorPrototype,
+    next() {
+      return iterator.next();
+    },
+  };
+}
 
 function isMinusZero(x) {
   return Object.is(-0, x);
 }
 
-let call = Function.prototype.call.bind(Function.prototype.call);
+const call = Function.prototype.call.bind(Function.prototype.call);
 
 export default class SameValueSet extends Set {
   constructor(iterable = []) {
@@ -57,10 +68,11 @@ export default class SameValueSet extends Set {
   }
 
   entries() {
-    if (this.containsMinusZero) {
-      return [...this.before.entries(), [-0, -0], ...this.after.entries()][Symbol.iterator]();
-    }
-    return [...this.before.entries(), ...this.after.entries()][Symbol.iterator]();
+    return createSetIterator([
+      ...this.before.entries(),
+      ...(this.containsMinusZero ? [[-0, -0]] : []),
+      ...this.after.entries()
+    ]);
   }
 
   forEach(callbackfn, thisArg = void 0) {
@@ -88,10 +100,11 @@ export default class SameValueSet extends Set {
   }
 
   values() {
-    if (this.containsMinusZero) {
-      return [...this.before.values(), -0, ...this.after.values()][Symbol.iterator]();
-    }
-    return [...this.before.values(), ...this.after.values()][Symbol.iterator]();
+    return createSetIterator([
+      ...this.before.values(),
+      ...(this.containsMinusZero ? [-0] : []),
+      ...this.after.values()
+    ]);
   }
 }
 
