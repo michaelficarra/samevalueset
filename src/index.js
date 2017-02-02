@@ -1,4 +1,5 @@
 // TODO: create real SetIterator objects
+// TODO: use flow
 
 function isMinusZero(x) {
   return Object.is(-0, x);
@@ -7,7 +8,7 @@ function isMinusZero(x) {
 let call = Function.prototype.call.bind(Function.prototype.call);
 
 export default class SameValueSet extends Set {
-  constructor(iterable) {
+  constructor(iterable = []) {
     super();
     this.before = new Set;
     this.after = new Set;
@@ -41,6 +42,10 @@ export default class SameValueSet extends Set {
     if (isMinusZero(value)) {
       if (this.containsMinusZero) {
         this.containsMinusZero = false;
+        for (let a of this.after) {
+          this.before.add(a);
+        }
+        this.after.clear();
         return true;
       }
       return false;
@@ -48,25 +53,26 @@ export default class SameValueSet extends Set {
     if (this.before.delete(value)) {
       return true;
     }
-    if (!this.containsMinusZero) {
-      return false;
-    }
     return this.after.delete(value);
   }
 
   entries() {
     if (this.containsMinusZero) {
-      return [...this.before.entries(), [-0, -0], ...this.after.entries()];
+      return [...this.before.entries(), [-0, -0], ...this.after.entries()][Symbol.iterator]();
     }
-    return [...this.before.entries(), ...this.after.entries()];
+    return [...this.before.entries(), ...this.after.entries()][Symbol.iterator]();
   }
 
   forEach(callbackfn, thisArg = void 0) {
-    this.before.forEach(callbackfn, thisArg);
+    this.before.forEach(a => {
+      call(callbackfn, thisArg, a, a, this);
+    });
     if (this.containsMinusZero) {
       call(callbackfn, thisArg, -0, -0, this);
     }
-    this.after.forEach(callbackfn, thisArg);
+    this.after.forEach(a => {
+      call(callbackfn, thisArg, a, a, this);
+    });
     return;
   }
 
@@ -83,9 +89,9 @@ export default class SameValueSet extends Set {
 
   values() {
     if (this.containsMinusZero) {
-      return [...this.before.values(), -0, ...this.after.values()];
+      return [...this.before.values(), -0, ...this.after.values()][Symbol.iterator]();
     }
-    return [...this.before.values(), ...this.after.values()];
+    return [...this.before.values(), ...this.after.values()][Symbol.iterator]();
   }
 }
 

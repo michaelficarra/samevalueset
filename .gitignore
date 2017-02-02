@@ -2,5 +2,6 @@
 *.iml
 node_modules/
 coverage/
+.nyc_output/
 dist/
 shift-parser.js
