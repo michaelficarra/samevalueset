@@ -74,15 +74,15 @@ export default class SameValueSet extends Set {
   }
 
   forEach(callbackfn, thisArg = void 0) {
-    this.before.forEach(a => {
+    for (let a of this.before) {
       call(callbackfn, thisArg, a, a, this);
-    });
+    }
     if (this.containsMinusZero) {
       call(callbackfn, thisArg, -0, -0, this);
     }
-    this.after.forEach(a => {
+    for (let a of this.after) {
       call(callbackfn, thisArg, a, a, this);
-    });
+    }
     return;
   }
 
