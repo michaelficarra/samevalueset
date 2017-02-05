@@ -1,5 +1,5 @@
 {
-  "name": "samevalue-set",
+  "name": "samevalueset",
   "version": "1.0.0-pre",
   "description": "ECMAScript Set, but using SameValue instead of SameValueZero",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/michaelficarra/samevalue-set.git"
+    "url": "git+ssh://git@github.com/michaelficarra/samevalueset.git"
   },
   "keywords": [
     "set",
@@ -28,9 +28,9 @@
   "author": "Michael Ficarra",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/michaelficarra/samevalue-set/issues"
+    "url": "https://github.com/michaelficarra/samevalueset/issues"
   },
-  "homepage": "https://github.com/michaelficarra/samevalue-set#readme",
+  "homepage": "https://github.com/michaelficarra/samevalueset#readme",
   "devDependencies": {
     "babel-cli": "6.22.2",
     "babel-eslint": "7.1.1",
