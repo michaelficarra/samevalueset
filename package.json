@@ -1,6 +1,6 @@
 {
   "name": "samevalueset",
-  "version": "1.0.0-pre",
+  "version": "1.0.0",
   "description": "ECMAScript Set, but using SameValue instead of SameValueZero",
   "main": "dist/index.js",
   "files": [
