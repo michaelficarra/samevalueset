@@ -161,6 +161,45 @@ describe('unit tests', () => {
     });
   });
 
+  describe('map', () => {
+    it('supports id', () => {
+      let values = [-2, -1, -0, 0, 1, 2];
+      let set = new SameValueSet(values);
+      assert.deepStrictEqual(values, Array.from(set.map(x => x)));
+    });
+
+    it('applies the function', () => {
+      let values = [-2, -1, -0, 0, 1, 2];
+      let set = new SameValueSet(values);
+      let succ = x => x + 1;
+      assert.deepStrictEqual(
+        Array.from(new SameValueSet(values.map(succ))),
+        Array.from(set.map(succ))
+      );
+    });
+
+    it('preserves composition', () => {
+      let values = [-2, -1, -0, 0, 1, 2];
+      let set = new SameValueSet(values);
+      let f = x => 1 / x;
+      let g = x => x ? -0 : x;
+      assert.deepStrictEqual(
+        Array.from(set.map(g).map(f)),
+        Array.from(set.map(x => f(g(x))))
+      );
+    });
+
+    it('passes appropriate this value', () => {
+      let n = 0, sentinel = {};
+      let set = new SameValueSet([0]);
+      set.map(function () {
+        assert.equal(this, sentinel);
+        ++n;
+      }, sentinel);
+      assert.equal(n, 1);
+    });
+  });
+
   describe('size', () => {
     it('supports empty sets', () => {
       let set = new SameValueSet();

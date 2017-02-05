@@ -93,6 +93,14 @@ export default class SameValueSet extends Set {
     return this.before.has(value) || this.after.has(value);
   }
 
+  map(f, thisArg = void 0) {
+    let out = new SameValueSet;
+    for (let a of this) {
+      out.add(call(f, thisArg, a, a, this));
+    }
+    return out;
+  }
+
   get size() {
     return this.before.size + +this.containsMinusZero + this.after.size;
   }
