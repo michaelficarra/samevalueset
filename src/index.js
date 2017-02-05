@@ -1,5 +1,3 @@
-// TODO: use flow
-
 const SetIteratorPrototype = Object.getPrototypeOf((new Set)[Symbol.iterator]());
 
 function createSetIterator(iterable) {
@@ -71,7 +69,7 @@ export default class SameValueSet extends Set {
     return createSetIterator([
       ...this.before.entries(),
       ...(this.containsMinusZero ? [[-0, -0]] : []),
-      ...this.after.entries()
+      ...this.after.entries(),
     ]);
   }
 
@@ -96,14 +94,14 @@ export default class SameValueSet extends Set {
   }
 
   get size() {
-    return this.before.size + (this.containsMinusZero ? 1 : 0) + this.after.size;
+    return this.before.size + +this.containsMinusZero + this.after.size;
   }
 
   values() {
     return createSetIterator([
-      ...this.before.values(),
+      ...this.before,
       ...(this.containsMinusZero ? [-0] : []),
-      ...this.after.values()
+      ...this.after,
     ]);
   }
 }
