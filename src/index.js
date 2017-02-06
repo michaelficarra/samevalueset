@@ -4,9 +4,7 @@ function createSetIterator(iterable) {
   let iterator = iterable[Symbol.iterator]();
   return {
     __proto__: SetIteratorPrototype,
-    next() {
-      return iterator.next();
-    },
+    next: iterator.next.bind(iterator),
   };
 }
 
