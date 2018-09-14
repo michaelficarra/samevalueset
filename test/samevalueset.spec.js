@@ -228,8 +228,9 @@ describe('unit tests', () => {
   });
 
   describe('inheritance', () => {
-    it('inherits from Set', () => {
-      assert.ok(new SameValueSet instanceof Set);
+    it('does not inherit from Set', () => {
+      assert.ok(!(new SameValueSet instanceof Set));
+      assert.ok(new SameValueSet instanceof Object);
     });
 
     it('produces real SetIterator objects', () => {

@@ -14,9 +14,8 @@ function isMinusZero(x) {
 
 const call = Function.prototype.call.bind(Function.prototype.call);
 
-export default class SameValueSet extends Set {
+export default class SameValueSet {
   constructor(iterable = []) {
-    super();
     this.before = new Set;
     this.after = new Set;
     this.containsMinusZero = false;
